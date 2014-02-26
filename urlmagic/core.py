@@ -150,7 +150,7 @@ class UrlGenerator(object):
         form_class=None,
         name_format="{role}_{model_system}_edit",
         permission_format=False,
-        template_format="{role}/{model_system}_update.html",
+        template_format="{role}/{model_system}_edit.html",
         model_key=None,
         url_format="^{model_plural_slug}/(?P<{model_key}>[^/]+)/edit/$",
         view=None,

@@ -1,3 +1,4 @@
+<h1>List view</h1>
 <ul>
     {% for object in object_list %}
         <li><a href="{% url url_name object.slug|default:object.pk %}">{{ object }}</a></li>
