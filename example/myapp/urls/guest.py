@@ -1,4 +1,4 @@
-from myapp.models import Alpha, Beta, Gamma, Delta, Epsilon
+from myapp.models import Alpha, Beta, Gamma
 from django.conf.urls import patterns
 from urlmagic.guest import GuestUrlGenerator
 
@@ -6,7 +6,7 @@ from urlmagic.guest import GuestUrlGenerator
 urlpatterns = patterns("")
 
 
-for model in (Alpha, Beta, Gamma, Delta, Epsilon):
+for model in (Alpha, Beta, Gamma):
     urlpatterns += patterns(
         "",
         GuestUrlGenerator.add(model),

@@ -1,4 +1,4 @@
-from myapp.models import Alpha, Beta, Gamma, Delta, Epsilon
+from myapp.models import Alpha, Beta, Gamma
 from django.conf.urls import patterns
 from urlmagic.member import MemberUrlGenerator
 
@@ -6,7 +6,7 @@ from urlmagic.member import MemberUrlGenerator
 urlpatterns = patterns("")
 
 
-for model in (Alpha, Beta, Gamma, Delta, Epsilon):
+for model in (Alpha, Beta, Gamma):
     urlpatterns += patterns(
         "",
         MemberUrlGenerator.add(model),

@@ -5,5 +5,3 @@ from myapp import models
 admin.site.register(models.Alpha)
 admin.site.register(models.Beta)
 admin.site.register(models.Gamma)
-admin.site.register(models.Delta)
-admin.site.register(models.Epsilon)

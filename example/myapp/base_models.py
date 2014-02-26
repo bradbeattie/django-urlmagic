@@ -10,13 +10,6 @@ class MightHaveOwner(models.Model):
         abstract = True
 
 
-class MustHaveOwner(models.Model):
-    owner = models.ForeignKey(User, db_index=True)
-
-    class Meta:
-        abstract = True
-
-
 class NamedAndSlugged(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True, unique=True, blank=True)
