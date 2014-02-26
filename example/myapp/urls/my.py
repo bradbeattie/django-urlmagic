@@ -1,6 +1,6 @@
 from myapp.models import Beta, Gamma, Delta
 from django.conf.urls import patterns
-from urlmagic import my
+from urlmagic.my import MyUrlGenerator
 
 
 urlpatterns = patterns("")
@@ -9,18 +9,18 @@ urlpatterns = patterns("")
 for model in (Beta, Gamma):
     urlpatterns += patterns(
         "",
-        my.get_add_url(model),
-        my.get_edit_url(model),
-        my.get_list_url(model),
-        my.get_detail_url(model),
-        my.get_delete_url(model),
-        my.get_list_url(model),
+        MyUrlGenerator.add(model),
+        MyUrlGenerator.edit(model),
+        MyUrlGenerator.list(model),
+        MyUrlGenerator.detail(model),
+        MyUrlGenerator.delete(model),
+        MyUrlGenerator.list(model),
     )
 
 urlpatterns += patterns(
     "",
-    my.get_singular_add_url(Delta),
-    my.get_singular_detail_url(Delta),
-    my.get_singular_edit_url(Delta),
-    my.get_singular_delete_url(Delta),
+    MyUrlGenerator.singular_add(Delta),
+    MyUrlGenerator.singular_detail(Delta),
+    MyUrlGenerator.singular_edit(Delta),
+    MyUrlGenerator.singular_delete(Delta),
 )

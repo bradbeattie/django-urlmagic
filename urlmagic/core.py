@@ -78,7 +78,6 @@ class UrlGenerator(object):
             response._callback = permission_required(permission_format.format(**format_kwargs))(response._callback)
         return response
 
-
     @classmethod
     def add_inner(
         cls,
@@ -177,7 +176,6 @@ class UrlGenerator(object):
             response._callback = permission_required(permission_format.format(**format_kwargs))(response._callback)
         return response
 
-
     @classmethod
     def delete_inner(
         cls,
@@ -211,20 +209,17 @@ class UrlGenerator(object):
             response._callback = permission_required(permission_format.format(**format_kwargs))(response._callback)
         return response
 
-
     @classmethod
     def singular_detail(cls, model, **kwargs):
         kwargs.setdefault("name_format", "{role}_{model_system}_detail")
         kwargs.setdefault("url_format", "^{model_singular_slug}/$")
         return cls.detail(model, **kwargs)
 
-
     @classmethod
     def singular_add(cls, model, **kwargs):
         kwargs.setdefault("name_format", "{role}_{model_system}_add")
         kwargs.setdefault("url_format", "^{model_singular_slug}/add/$")
         return cls.add(model, **kwargs)
-
 
     @classmethod
     def singular_edit(cls, model, **kwargs):
@@ -233,7 +228,6 @@ class UrlGenerator(object):
         kwargs.setdefault("view_kwargs", {})
         kwargs["view_kwargs"].setdefault("success_url", ".")
         return cls.edit(model, **kwargs)
-
 
     @classmethod
     def singular_delete(cls, model, **kwargs):
