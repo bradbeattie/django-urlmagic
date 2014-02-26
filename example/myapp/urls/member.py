@@ -14,5 +14,4 @@ for model in (Alpha, Beta, Gamma, Delta, Epsilon):
         MemberUrlGenerator.list(model),
         MemberUrlGenerator.detail(model),
         MemberUrlGenerator.delete(model),
-        MemberUrlGenerator.list(model),
     )

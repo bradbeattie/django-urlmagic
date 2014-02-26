@@ -14,5 +14,4 @@ for model in (Alpha, Beta, Gamma, Delta, Epsilon):
         GuestUrlGenerator.list(model),
         GuestUrlGenerator.detail(model),
         GuestUrlGenerator.delete(model),
-        GuestUrlGenerator.list(model),
     )

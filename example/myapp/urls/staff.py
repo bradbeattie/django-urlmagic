@@ -14,5 +14,4 @@ for model in (Alpha, Beta, Gamma, Delta, Epsilon):
         StaffUrlGenerator.list(model),
         StaffUrlGenerator.detail(model),
         StaffUrlGenerator.delete(model),
-        StaffUrlGenerator.list(model),
     )

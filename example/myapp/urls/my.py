@@ -14,7 +14,6 @@ for model in (Beta, Gamma):
         MyUrlGenerator.list(model),
         MyUrlGenerator.detail(model),
         MyUrlGenerator.delete(model),
-        MyUrlGenerator.list(model),
     )
 
 urlpatterns += patterns(
