@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='django-urlmagic',
-    version='0.3.1',
+    version='0.3.2',
     packages=['urlmagic',],
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     long_description=open('README.md').read(),
