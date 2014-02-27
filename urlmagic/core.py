@@ -12,6 +12,14 @@ from urlmagic.utils import model_names
 class UrlGenerator(object):
     __metaclass__ = ABCMeta
 
+    default_views = {
+        "create": CreateView,
+        "delete": DeleteView,
+        "detail": DetailView,
+        "edit": UpdateView,
+        "list": ListView,
+    }
+
     @classmethod
     def get_model_key(cls, model):
         for field in model._meta.fields:
@@ -69,7 +77,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or ListView).as_view(**view_kwargs),
+            (view or cls.default_views.get("list", ListView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -101,7 +109,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or CreateView).as_view(**view_kwargs),
+            (view or cls.default_views.get("create", CreateView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -133,7 +141,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or DetailView).as_view(**view_kwargs),
+            (view or cls.default_views.get("detail", DetailView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -167,7 +175,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or UpdateView).as_view(**view_kwargs),
+            (view or cls.default_views.get("update", UpdateView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -200,7 +208,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or DeleteView).as_view(**view_kwargs),
+            (view or cls.default_views.get("delete", DeleteView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
