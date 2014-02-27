@@ -1,5 +1,5 @@
 <h1>Delete view</h1>
-{{ object }}
+<pre>{{ object }}</pre>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
