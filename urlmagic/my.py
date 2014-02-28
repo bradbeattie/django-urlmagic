@@ -15,12 +15,6 @@ class MyUrlGenerator(MemberUrlGenerator):
         return d
 
     @classmethod
-    def adjust_result(cls, r):
-        super(MemberUrlGenerator, cls).adjust_result(r)
-        r._callback = user_passes_test(lambda u: u.is_staff)(r._callback)
-        return r
-
-    @classmethod
     def list(cls, model, **kwargs):
         kwargs.setdefault("view", filtered_views.FilteredListView)
         return super(MyUrlGenerator, cls).list(model, **kwargs)
