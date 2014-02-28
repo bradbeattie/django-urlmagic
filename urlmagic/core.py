@@ -3,9 +3,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib.auth.decorators import permission_required
 from django.db.models.fields import SlugField
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from django.views.generic.list import ListView
+from urlmagic import views
 from urlmagic.utils import model_names
 
 
@@ -13,11 +11,11 @@ class UrlGenerator(object):
     __metaclass__ = ABCMeta
 
     default_views = {
-        "create": CreateView,
-        "delete": DeleteView,
-        "detail": DetailView,
-        "edit": UpdateView,
-        "list": ListView,
+        "create": views.ContextCreateView,
+        "delete": views.ContextDeleteView,
+        "detail": views.ContextDetailView,
+        "edit": views.ContextUpdateView,
+        "list": views.ContextListView,
     }
 
     @classmethod
@@ -71,13 +69,15 @@ class UrlGenerator(object):
         format_kwargs = format_kwargs or {}
         format_kwargs.update(model_names(model))
         view_kwargs = view_kwargs or {}
+        view_kwargs.setdefault("extra_context", {})
+        view_kwargs["extra_context"].update(format_kwargs)
         view_kwargs.setdefault("model", model)
         view_kwargs.setdefault("queryset", queryset)
         view_kwargs.setdefault("paginate_by", getattr(settings, "PAGINATE_PER_PAGE", 50))
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("list", ListView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("list", views.ContextListView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -103,13 +103,15 @@ class UrlGenerator(object):
         format_kwargs = format_kwargs or {}
         format_kwargs.update(model_names(model))
         view_kwargs = view_kwargs or {}
+        view_kwargs.setdefault("extra_context", {})
+        view_kwargs["extra_context"].update(format_kwargs)
         view_kwargs.setdefault("form_class", form_class)
         view_kwargs.setdefault("model", model)
         view_kwargs.setdefault("queryset", queryset)
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("create", CreateView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("create", views.ContextCreateView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -136,12 +138,14 @@ class UrlGenerator(object):
         format_kwargs.setdefault("model_key", model_key or cls.get_model_key(model))
         format_kwargs.update(model_names(model))
         view_kwargs = view_kwargs or {}
+        view_kwargs.setdefault("extra_context", {})
+        view_kwargs["extra_context"].update(format_kwargs)
         view_kwargs.setdefault("model", model)
         view_kwargs.setdefault("queryset", queryset)
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("detail", DetailView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("detail", views.ContextDetailView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -169,13 +173,15 @@ class UrlGenerator(object):
         format_kwargs.setdefault("model_key", model_key or cls.get_model_key(model))
         format_kwargs.update(model_names(model))
         view_kwargs = view_kwargs or {}
+        view_kwargs.setdefault("extra_context", {})
+        view_kwargs["extra_context"].update(format_kwargs)
         view_kwargs.setdefault("form_class", form_class)
         view_kwargs.setdefault("model", model)
         view_kwargs.setdefault("queryset", queryset)
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("edit", UpdateView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("edit", views.ContextUpdateView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:
@@ -202,13 +208,15 @@ class UrlGenerator(object):
         format_kwargs.setdefault("model_key", model_key or cls.get_model_key(model))
         format_kwargs.update(model_names(model))
         view_kwargs = view_kwargs or {}
+        view_kwargs.setdefault("extra_context", {})
+        view_kwargs["extra_context"].update(format_kwargs)
         view_kwargs.setdefault("success_url", "../..")
         view_kwargs.setdefault("model", model)
         view_kwargs.setdefault("queryset", queryset)
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("delete", DeleteView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("delete", views.ContextDeleteView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:

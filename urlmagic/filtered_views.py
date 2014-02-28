@@ -1,10 +1,8 @@
 from django.contrib.auth.models import User
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
-from django.views.generic.list import ListView
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from urlmagic.utils import get_related_model
+from urlmagic import views
 
 
 class DynamicFilter(object):
@@ -30,7 +28,7 @@ class DynamicFilter(object):
             self.kwargs["pk"] = self.queryset[0].pk if self.queryset.count() else 0
 
 
-class FilteredListView(DynamicFilter, ListView):
+class FilteredListView(DynamicFilter, views.ContextListView):
     add_context = ""
     context_object = None
 
@@ -58,7 +56,7 @@ class FilteredListView(DynamicFilter, ListView):
         return context
 
 
-class FilteredCreateView(DynamicFilter, CreateView):
+class FilteredCreateView(DynamicFilter, views.ContextCreateView):
 
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs(request, *args, **kwargs)
@@ -77,13 +75,13 @@ class FilteredCreateView(DynamicFilter, CreateView):
         return super(FilteredCreateView, self).post(request, *args, **kwargs)
 
 
-class FilteredDetailView(DynamicFilter, DetailView):
+class FilteredDetailView(DynamicFilter, views.ContextDetailView):
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs(request, *args, **kwargs)
         return super(FilteredDetailView, self).get(request, *args, **kwargs)
 
 
-class FilteredUpdateView(DynamicFilter, UpdateView):
+class FilteredUpdateView(DynamicFilter, views.ContextUpdateView):
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs(request, *args, **kwargs)
         return super(FilteredUpdateView, self).get(request, *args, **kwargs)
@@ -93,13 +91,13 @@ class FilteredUpdateView(DynamicFilter, UpdateView):
         return super(FilteredUpdateView, self).post(request, *args, **kwargs)
 
 
-class FilteredDeleteView(DynamicFilter, DeleteView):
+class FilteredDeleteView(DynamicFilter, views.ContextDeleteView):
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs(request, *args, **kwargs)
         return super(FilteredDeleteView, self).get(request, *args, **kwargs)
 
 
-class FilteredDetailOrCreateView(DynamicFilter, DetailView, CreateView):
+class FilteredDetailOrCreateView(DynamicFilter, views.ContextDetailView, views.ContextCreateView):
     add_form_class = None
     add_template_name = None
     detail_template_name = None
@@ -137,7 +135,7 @@ class FilteredDetailOrCreateView(DynamicFilter, DetailView, CreateView):
             )(request, *args, **kwargs)
 
 
-class FilteredUpdateOrCreateView(DynamicFilter, UpdateView, CreateView):
+class FilteredUpdateOrCreateView(DynamicFilter, views.ContextUpdateView, views.ContextCreateView):
     add_form_class = None
     add_template_name = None
     update_form_class = None
