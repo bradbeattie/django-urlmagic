@@ -1,5 +1,5 @@
 from urlmagic.core import UrlGenerator
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 
 
 class MemberUrlGenerator(UrlGenerator):
@@ -14,5 +14,5 @@ class MemberUrlGenerator(UrlGenerator):
     @classmethod
     def adjust_result(cls, r):
         super(MemberUrlGenerator, cls).adjust_result(r)
-        r._callback = user_passes_test(lambda u: u.is_authenticated)(r._callback)
+        r._callback = login_required(r._callback)
         return r

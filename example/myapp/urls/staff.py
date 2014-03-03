@@ -9,9 +9,9 @@ urlpatterns = patterns("")
 for model in (Alpha, Beta, Gamma):
     urlpatterns += patterns(
         "",
+        StaffUrlGenerator.list(model),
         StaffUrlGenerator.add(model),
         StaffUrlGenerator.edit(model),
-        StaffUrlGenerator.list(model),
-        StaffUrlGenerator.detail(model),
         StaffUrlGenerator.delete(model),
+        StaffUrlGenerator.detail(model),
     )

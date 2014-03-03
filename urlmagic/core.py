@@ -226,12 +226,6 @@ class UrlGenerator(object):
         return response
 
     @classmethod
-    def singular_detail(cls, model, **kwargs):
-        kwargs.setdefault("name_format", "{role}_{model_system}_detail")
-        kwargs.setdefault("url_format", "^{model_singular_short}/$")
-        return cls.detail(model, **kwargs)
-
-    @classmethod
     def singular_add(cls, model, **kwargs):
         kwargs.setdefault("name_format", "{role}_{model_system}_add")
         kwargs.setdefault("url_format", "^{model_singular_short}/add/$")
@@ -244,6 +238,12 @@ class UrlGenerator(object):
         kwargs.setdefault("view_kwargs", {})
         kwargs["view_kwargs"].setdefault("success_url", ".")
         return cls.edit(model, **kwargs)
+
+    @classmethod
+    def singular_detail(cls, model, **kwargs):
+        kwargs.setdefault("name_format", "{role}_{model_system}_detail")
+        kwargs.setdefault("url_format", "^{model_singular_short}/$")
+        return cls.detail(model, **kwargs)
 
     @classmethod
     def singular_delete(cls, model, **kwargs):

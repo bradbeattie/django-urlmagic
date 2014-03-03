@@ -1,4 +1,5 @@
-.env
-dist/
-MANIFEST
 *.pyc
+*.swp
+.env
+MANIFEST
+dist/

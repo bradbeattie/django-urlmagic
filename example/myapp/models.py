@@ -17,7 +17,12 @@ class Beta(NamedAndSlugged, MightHaveOwner):
 class Gamma(models.Model):
     owner = models.OneToOneField(User, db_index=True)
     name = models.CharField(max_length=100, db_index=True)
+
+    def __unicode__(self):
+        return self.name
+
     def get_absolute_url(self):
         return reverse("guest_gamma_detail", args=[self.pk])
+
     class Meta:
         verbose_name = "Verbose-named Gamma"
