@@ -23,3 +23,37 @@ class AutomaticUserFormMixin(object):
         for field_name in getattr(self, "user_fields", self.get_user_field_names()):
             setattr(self.instance, field_name, self.request.user)
         return super(AutomaticUserFormMixin, self).save(*args, **kwargs)
+
+
+class FilterViewMixin(object):
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return super(FilterViewMixin, self).get_queryset().filter(owner=self.request.user)
+        else:
+            raise PermissionDenied
+
+
+class SingularViewMixin(object):
+    def adjust_kwargs(self):
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if pk is None and slug is None:
+            queryset = self.get_queryset()
+            if queryset.count():
+                self.kwargs["pk"] = queryset[0].pk
+                return
+
+    def get(self, request, *args, **kwargs):
+        self.adjust_kwargs()
+        return super(SingularViewMixin, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.adjust_kwargs()
+        return super(SingularViewMixin, self).post(request, *args, **kwargs)
+
+
+class FormRequestViewMixin(object):
+    def get_form(self, form_class):
+        form = super(FormRequestViewMixin, self).get_form(form_class)
+        form.request = self.request
+        return form
