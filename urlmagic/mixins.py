@@ -1,3 +1,7 @@
+from django.contrib.auth.models import User
+from django.db.models.fields.related import ForeignKey
+
+
 class ContextViewMixin(object):
     extra_context = {}
 
@@ -8,6 +12,14 @@ class ContextViewMixin(object):
 
 
 class AutomaticUserFormMixin(object):
+    def get_user_field_names(self):
+        return [
+            field.name
+            for field in self.instance._meta.fields
+            if isinstance(field, ForeignKey) and field.related.parent_model is User
+        ]
+
     def save(self, *args, **kwargs):
-        self.instance.owner = self.request.user
+        for field_name in getattr(self, "user_fields", self.get_user_field_names()):
+            setattr(self.instance, field_name, self.request.user)
         return super(AutomaticUserFormMixin, self).save(*args, **kwargs)
