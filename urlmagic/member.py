@@ -5,10 +5,10 @@ from django.contrib.auth.decorators import user_passes_test
 class MemberUrlGenerator(UrlGenerator):
 
     @classmethod
-    def adjust_dict(cls, d):
+    def adjust_dict(cls, model, d):
         d.setdefault("format_kwargs", {})
         d["format_kwargs"].setdefault("role", "member")
-        super(MemberUrlGenerator, cls).adjust_dict(d)
+        super(MemberUrlGenerator, cls).adjust_dict(model, d)
         return d
 
     @classmethod
