@@ -1,5 +1,4 @@
-from django.contrib.auth.models import User
-from django.db.models.fields.related import ForeignKey
+from urlmagic.utils import get_user_field_names
 
 
 class ContextViewMixin(object):
@@ -12,15 +11,8 @@ class ContextViewMixin(object):
 
 
 class AutomaticUserFormMixin(object):
-    def get_user_field_names(self):
-        return [
-            field.name
-            for field in self.instance._meta.fields
-            if isinstance(field, ForeignKey) and field.related.parent_model is User
-        ]
-
     def save(self, *args, **kwargs):
-        for field_name in getattr(self, "user_fields", self.get_user_field_names()):
+        for field_name in getattr(self, "user_fields", get_user_field_names(self.instance)):
             setattr(self.instance, field_name, self.request.user)
         return super(AutomaticUserFormMixin, self).save(*args, **kwargs)
 
@@ -28,7 +20,10 @@ class AutomaticUserFormMixin(object):
 class FilterViewMixin(object):
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            return super(FilterViewMixin, self).get_queryset().filter(owner=self.request.user)
+            kwargs = {}
+            for field_name in getattr(self, "user_fields", get_user_field_names(self.model)):
+                kwargs[field_name] = self.request.user
+            return super(FilterViewMixin, self).get_queryset().filter(**kwargs)
         else:
             raise PermissionDenied
 
