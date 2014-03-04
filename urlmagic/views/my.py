@@ -1,5 +1,3 @@
-from django.core.exceptions import PermissionDenied
-from django.http import Http404
 from urlmagic.views import core
 from urlmagic import mixins
 

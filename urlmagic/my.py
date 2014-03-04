@@ -1,5 +1,4 @@
 from urlmagic.member import MemberUrlGenerator
-from django.contrib.auth.decorators import user_passes_test
 from urlmagic.views import my
 
 

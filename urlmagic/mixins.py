@@ -1,4 +1,5 @@
 from urlmagic.utils import get_user_field_names
+from django.core.exceptions import PermissionDenied
 
 
 class ContextViewMixin(object):
