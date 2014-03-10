@@ -1,11 +1,12 @@
 from django.core.urlresolvers import reverse
+from myapp import models
 from myapp.tests import common
 
 
-class GuestTest(common.CommonTestClass):
+class MemberTest(common.CommonTestClass):
 
     def setUp(self):
-        super(GuestTest, self).setUp()
+        super(MemberTest, self).setUp()
         self.establish_member_client()
 
     def url_test(self, patterns, namespaces=[]):
@@ -36,3 +37,11 @@ class GuestTest(common.CommonTestClass):
                 else:
                     self.assertEqual(response.status_code, 200)
                     print 200
+
+    # Confirm that an owned object gets saved with the right owner
+    def test_submit_owned_object(self):
+        slug = "test_submit_owned_object_slug"
+        name = "Test Submit Owned Object Name"
+        self.assertEqual(models.Beta.objects.filter(slug=slug).count(), 0)
+        response = self.client.post(reverse("my_beta_add"), {"name": name, "slug": slug})
+        self.assertEqual(self.client.user, models.Beta.objects.get(slug=slug, name=name).owner)
