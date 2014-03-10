@@ -5,7 +5,7 @@ from urlmagic.views import my
 class MyUrlGenerator(MemberUrlGenerator):
 
     default_views = {
-        "create": my.MyCreateView,
+        "add": my.MyCreateView,
         "delete": my.MyDeleteView,
         "detail": my.MyDetailView,
         "edit": my.MyUpdateView,

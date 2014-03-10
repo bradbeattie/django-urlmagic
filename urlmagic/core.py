@@ -11,7 +11,7 @@ class UrlGenerator(object):
     __metaclass__ = ABCMeta
 
     default_views = {
-        "create": core.ContextCreateView,
+        "add": core.ContextCreateView,
         "delete": core.ContextDeleteView,
         "detail": core.ContextDetailView,
         "edit": core.ContextUpdateView,
@@ -111,7 +111,7 @@ class UrlGenerator(object):
         view_kwargs.setdefault("template_name", template_format.format(**format_kwargs))
         response = url(
             url_format.format(**format_kwargs),
-            (view or cls.default_views.get("create", core.ContextCreateView)).as_view(**view_kwargs),
+            (view or cls.default_views.get("add", core.ContextCreateView)).as_view(**view_kwargs),
             name=name_format.format(**format_kwargs)
         )
         if permission_format:

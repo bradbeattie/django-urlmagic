@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.models import Permission
-from django.contrib.sites.models import Site
 from django.test import Client, TestCase
 from django.utils.text import slugify
 from example import urls

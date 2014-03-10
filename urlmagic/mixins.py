@@ -37,7 +37,6 @@ class SingularViewMixin(object):
             queryset = self.get_queryset()
             if queryset.count():
                 self.kwargs["pk"] = queryset[0].pk
-                return
 
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs()
