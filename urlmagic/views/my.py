@@ -1,22 +1,30 @@
-from urlmagic.views import core
 from urlmagic import mixins
+from urlmagic.utils import get_user_field_names
+from urlmagic.views import filtered
 
 
-class MyListView(mixins.FilterViewMixin, core.ContextListView):
+class MyMixin(object):
+    def __init__(self, *args, **kwargs):
+        super(MyMixin, self).__init__(*args, **kwargs)
+        for field_name in get_user_field_names(self.model):
+            self.queryset_filter.setdefault(field_name, filtered.FilteredViewMixin.REQUEST_USER)
+
+
+class MyListView(MyMixin, filtered.FilteredListView):
     pass
 
 
-class MyDetailView(mixins.FilterViewMixin, mixins.SingularViewMixin, core.ContextDetailView):
+class MyDetailView(MyMixin, filtered.FilteredDetailView):
     pass
 
 
-class MyCreateView(mixins.FilterViewMixin, mixins.FormRequestViewMixin, core.ContextCreateView):
+class MyCreateView(MyMixin, filtered.FilteredCreateView):
     pass
 
 
-class MyUpdateView(mixins.FilterViewMixin, mixins.SingularViewMixin, mixins.FormRequestViewMixin, core.ContextUpdateView):
+class MyUpdateView(MyMixin, filtered.FilteredUpdateView):
     pass
 
 
-class MyDeleteView(mixins.FilterViewMixin, mixins.SingularViewMixin, core.ContextDeleteView):
+class MyDeleteView(MyMixin, filtered.FilteredDeleteView):
     pass

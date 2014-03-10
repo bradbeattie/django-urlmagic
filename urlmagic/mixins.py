@@ -18,17 +18,6 @@ class AutomaticUserFormMixin(object):
         return super(AutomaticUserFormMixin, self).save(*args, **kwargs)
 
 
-class FilterViewMixin(object):
-    def get_queryset(self):
-        if self.request.user.is_authenticated():
-            kwargs = {}
-            for field_name in getattr(self, "user_fields", get_user_field_names(self.model)):
-                kwargs[field_name] = self.request.user
-            return super(FilterViewMixin, self).get_queryset().filter(**kwargs)
-        else:
-            raise PermissionDenied
-
-
 class SingularViewMixin(object):
     def adjust_kwargs(self):
         pk = self.kwargs.get(self.pk_url_kwarg, None)

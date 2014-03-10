@@ -10,6 +10,8 @@ class Alpha(NamedAndSlugged):
 
 
 class Beta(NamedAndSlugged, MightHaveOwner):
+    alpha = models.ForeignKey(Alpha, blank=True, null=True)
+
     def get_absolute_url(self):
         return reverse("guest_beta_detail", args=[self.slug])
 
