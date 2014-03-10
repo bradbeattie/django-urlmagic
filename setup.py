@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='django-urlmagic',
-    version='0.3.8',
-    packages=['urlmagic',],
+    version='0.3.9',
+    packages=['urlmagic', 'urlmagic.views'],
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     long_description=open('README.md').read(),
     url='https://github.com/bradbeattie/django-urlmagic',
