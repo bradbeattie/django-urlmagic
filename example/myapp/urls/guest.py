@@ -40,5 +40,11 @@ urlpatterns += patterns(
         view=filtered.FilteredListView,
         url_format="^alphas/(?P<alpha__slug>[^/]+)/{model_plural_short}/$",
         name_format="guest_alpha__slug_beta_list",
-    )
+    ),
+    GuestUrlGenerator.singular_detail(
+        Gamma,
+        view=filtered.FilteredDetailView,
+        url_format="^users/(?P<owner__pk>[^/]+)/{model_singular_short}/$",
+        name_format="guest_owner__pk_gamma_detail",
+    ),
 )
