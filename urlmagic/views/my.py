@@ -4,10 +4,9 @@ from urlmagic.views import filtered
 
 
 class MyMixin(object):
-    def __init__(self, *args, **kwargs):
-        super(MyMixin, self).__init__(*args, **kwargs)
-        for field_name in get_user_field_names(self.model):
-            self.queryset_filter.setdefault(field_name, filtered.FilteredViewMixin.REQUEST_USER)
+    additional_kwargs = {
+        "%s_owner" % filtered.FilteredViewMixin.REQUEST_USER: True,
+    }
 
 
 class MyListView(MyMixin, filtered.FilteredListView):

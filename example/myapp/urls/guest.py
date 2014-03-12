@@ -19,7 +19,6 @@ for model in (Alpha, Beta, Gamma, Delta):
     )
 
 
-
 urlpatterns += patterns(
     "",
     GuestUrlGenerator.list(User),
@@ -27,22 +26,19 @@ urlpatterns += patterns(
     GuestUrlGenerator.list(
         Beta,
         view=filtered.FilteredListView,
-        view_kwargs={"queryset_filter": {"owner": "request.user"}},
-        url_format="^users/(?P<user_pk>[^/]+)/{model_plural_short}/$",
-        name_format="guest_user_pk_beta_list",
+        url_format="^users/(?P<request_user_owner>[^/]+)/{model_plural_short}/$",  # TODO: Would be nice to get "users" automatically
+        name_format="guest_request_user_owner_beta_list",  # TODO: Would be nice to get this name format automatically
     ),
     GuestUrlGenerator.list(
         Delta,
         view=filtered.FilteredListView,
-        view_kwargs={"queryset_filter": {"alphas__slug": "alpha_slug"}},
-        url_format="^alphas/(?P<alpha_slug>[^/]+)/{model_plural_short}/$",
-        name_format="guest_alpha_slug_delta_list",
+        url_format="^alphas/(?P<alphas__slug>[^/]+)/{model_plural_short}/$",  # TODO: Would be nice to get "alphas" automatically
+        name_format="guest_alphas__slug_delta_list",
     ),
     GuestUrlGenerator.list(
         Beta,
         view=filtered.FilteredListView,
-        view_kwargs={"queryset_filter": {"alpha__slug": "alpha_slug"}},
-        url_format="^alphas/(?P<alpha_slug>[^/]+)/{model_plural_short}/$",
-        name_format="guest_alpha_slug_beta_list",
+        url_format="^alphas/(?P<alpha__slug>[^/]+)/{model_plural_short}/$",
+        name_format="guest_alpha__slug_beta_list",
     )
 )

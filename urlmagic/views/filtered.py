@@ -19,16 +19,30 @@ from urlmagic.views import core
 
 
 class FilteredViewMixin(object):
-    queryset_filter = {}
-    context_field_chain = None
-    REQUEST_USER = "request.user"
+    context_slug = None
+    REQUEST_USER = "request_user"
+    additional_kwargs = {}
+
+    def trim_request_user(self, string):
+        return string[len(self.REQUEST_USER) + 1:] if string.startswith(self.REQUEST_USER) else string
+
+    def get_merged_kwargs(self):
+        kwargs = {}
+        kwargs.update(self.kwargs)
+        kwargs.update(self.additional_kwargs)
+        return kwargs
 
     def get_filter_kwargs(self):
-        if self.REQUEST_USER in self.queryset_filter.values() and not self.request.user.is_authenticated():
-            raise PermissionDenied
+        if not self.request.user.is_authenticated():
+            for key in self.kwargs.keys():
+                if key.startswith(self.REQUEST_USER):
+                    raise PermissionDenied
         return dict(
-            (field_slug, self.request.user if url_variable == self.REQUEST_USER else self.kwargs[url_variable])
-            for field_slug, url_variable in self.queryset_filter.iteritems()
+            (
+                self.trim_request_user(key),
+                self.request.user if key.startswith(self.REQUEST_USER) else value,
+            )
+            for key, value in self.get_merged_kwargs().iteritems()
         )
 
     def get_queryset(self):
@@ -38,21 +52,21 @@ class FilteredViewMixin(object):
         context = super(FilteredViewMixin, self).get_context_data(*args, **kwargs)
 
         # Add in the queryset used for this filtered view
-        context.update({"queryset_filter": self.get_filter_kwargs()})
+        context.update({"view_filter_kwargs": self.get_filter_kwargs()})
 
-        # Add in the object that's been filtered on if clear or explicitly provided
-        if self.context_field_chain or len(self.queryset_filter) == 1:
+        # Add in the object that's been filtered on if there's only one or if it's been explicitly provided
+        if self.context_slug or len(self.get_merged_kwargs()) == 1:
             context_pointer = self.model
-            context_field_chain = self.context_field_chain or self.queryset_filter.keys()[0]
-            field_names = context_field_chain.split(LOOKUP_SEP)
+            context_slug = self.context_slug or self.get_merged_kwargs().keys()[0]
+            field_names = context_slug.split(LOOKUP_SEP)
             try:
                 for field_name in field_names:
-                    context_pointer = get_model_from_relation(context_pointer._meta.get_field_by_name(field_name)[0])
+                    context_pointer = get_model_from_relation(context_pointer._meta.get_field_by_name(self.trim_request_user(field_name))[0])
                 field_name = "pk"
-                field_value = context["queryset_filter"][context_field_chain].pk
+                field_value = context["view_filter_kwargs"][self.trim_request_user(context_slug)].pk
             except NotRelationField:
                 field_name = field_names[-1]
-                field_value = context["queryset_filter"][context_field_chain]
+                field_value = context["view_filter_kwargs"][context_slug]
             context["context_object"] = context_pointer.objects.get(**{field_name: field_value})
 
         return context
