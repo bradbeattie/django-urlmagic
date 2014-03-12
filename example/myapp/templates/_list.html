@@ -1,6 +1,7 @@
-<h1>List view</h1>
+<h1>{{ model_plural | capfirst }}{% if context_object %} belonging to {{ context_object }}{% endif %}</h1>
 <ul>
     {% for object in object_list %}
         <li><a href="{% url url_name object.slug|default:object.pk %}">{{ object }}</a></li>
     {% endfor %}
 </ul>
+<pre>{% filter force_escape %}{% debug %}{% endfilter %}</pre>

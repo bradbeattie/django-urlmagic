@@ -28,3 +28,10 @@ class Gamma(models.Model):
 
     class Meta:
         verbose_name = "Verbose-named Gamma"
+
+
+class Delta(NamedAndSlugged):
+    alphas = models.ManyToManyField(Alpha, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse("guest_delta_detail", args=[self.slug])

@@ -1,4 +1,4 @@
-<h1>Edit view</h1>
+<h1>Edit this {{ model_singular }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
