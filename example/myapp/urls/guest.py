@@ -29,7 +29,7 @@ urlpatterns += patterns(
         view=filtered.FilteredListView,
         view_kwargs={"queryset_filter": {"owner": "request.user"}},
         url_format="^users/(?P<user_pk>[^/]+)/{model_plural_short}/$",
-        name_format="guest_alpha_pk_beta_list",
+        name_format="guest_user_pk_beta_list",
     ),
     GuestUrlGenerator.list(
         Delta,
