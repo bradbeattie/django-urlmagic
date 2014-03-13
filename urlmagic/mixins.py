@@ -36,7 +36,7 @@ class SingularViewMixin(object):
 
 
 class FormRequestViewMixin(object):
-    def get_form(self, form_class):
-        form = super(FormRequestViewMixin, self).get_form(form_class)
-        form.request = self.request
-        return form
+    def get_form_kwargs(self):
+        kwargs = super(FormRequestViewMixin, self).get_form_kwargs()
+        kwargs["request"] = self.request
+        return kwargs
