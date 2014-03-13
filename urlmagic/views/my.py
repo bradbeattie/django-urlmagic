@@ -1,5 +1,3 @@
-from urlmagic import mixins
-from urlmagic.utils import get_user_field_names
 from urlmagic.views import filtered
 
 

@@ -1,8 +1,8 @@
 from urlmagic import mixins
+from django.core.exceptions import PermissionDenied
 from django.contrib.admin.util import NotRelationField
 from django.contrib.admin.util import get_model_from_relation
 from django.db.models.constants import LOOKUP_SEP
-from urlmagic.utils import get_user_field_names
 from urlmagic.views import core
 
 

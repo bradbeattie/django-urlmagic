@@ -43,5 +43,5 @@ class MemberTest(common.CommonTestClass):
         slug = "test_submit_owned_object_slug"
         name = "Test Submit Owned Object Name"
         self.assertEqual(models.Beta.objects.filter(slug=slug).count(), 0)
-        response = self.client.post(reverse("my_beta_add"), {"name": name, "slug": slug})
+        self.client.post(reverse("my_beta_add"), {"name": name, "slug": slug})
         self.assertEqual(self.client.user, models.Beta.objects.get(slug=slug, name=name).owner)
