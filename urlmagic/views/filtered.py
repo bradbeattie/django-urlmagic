@@ -1,4 +1,5 @@
 from urlmagic import mixins
+from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.contrib.admin.util import NotRelationField
 from django.contrib.admin.util import get_model_from_relation
@@ -14,8 +15,9 @@ from urlmagic.views import core
 # /alphas/active/   Alpha.objects.filter(active=True)
 # /alphas/1/        Alpha.objects.get(pk=1)
 # /alphas/1/betas/  Beta.objects.filter(alphas__pk=1)
+# /alphas/1/beta/   Beta.objects.get(alphas__pk=1)
 #
-# It's the concept in this last example that these filtered views address.
+# It's the concept in these last two examples that these filtered views address.
 
 
 class FilteredViewMixin(object):
@@ -61,7 +63,10 @@ class FilteredViewMixin(object):
             field_names = context_slug.split(LOOKUP_SEP)
             try:
                 for field_name in field_names:
-                    context_pointer = get_model_from_relation(context_pointer._meta.get_field_by_name(self.trim_request_user(field_name))[0])
+                    field_name = self.trim_request_user(field_name)
+                    if field_name == "pk":
+                        field_name = context_pointer._meta.pk.name
+                    context_pointer = get_model_from_relation(context_pointer._meta.get_field_by_name(field_name)[0])
                 field_name = "pk"
                 field_value = context["view_filter_kwargs"][self.trim_request_user(context_slug)].pk
             except NotRelationField:
@@ -76,7 +81,7 @@ class FilteredListView(FilteredViewMixin, core.ContextListView):
     pass
 
 
-class FilteredDetailView(FilteredViewMixin, mixins.SingularViewMixin, core.ContextDetailView):
+class FilteredDetailView(FilteredViewMixin, core.ContextDetailView):
     pass
 
 
@@ -84,9 +89,9 @@ class FilteredCreateView(FilteredViewMixin, mixins.FormRequestViewMixin, core.Co
     pass
 
 
-class FilteredUpdateView(FilteredViewMixin, mixins.SingularViewMixin, mixins.FormRequestViewMixin, core.ContextUpdateView):
+class FilteredUpdateView(FilteredViewMixin, mixins.FormRequestViewMixin, core.ContextUpdateView):
     pass
 
 
-class FilteredDeleteView(FilteredViewMixin, mixins.SingularViewMixin, core.ContextDeleteView):
+class FilteredDeleteView(FilteredViewMixin, core.ContextDeleteView):
     pass

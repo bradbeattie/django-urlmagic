@@ -1,6 +1,7 @@
 from django.conf.urls import patterns
 from django.contrib.auth.models import User
 from myapp.models import Alpha, Beta, Gamma, Delta
+from myapp import forms
 from urlmagic.guest import GuestUrlGenerator
 from urlmagic.views import filtered
 
@@ -46,5 +47,20 @@ urlpatterns += patterns(
         view=filtered.FilteredDetailView,
         url_format="^users/(?P<owner__pk>[^/]+)/{model_singular_short}/$",
         name_format="guest_owner__pk_gamma_detail",
+        view_kwargs={"redirect_on_404": "add/"},
+    ),
+    GuestUrlGenerator.singular_add(
+        Gamma,
+        view=filtered.FilteredCreateView,
+        form_class=forms.GuestGammaAdd,
+        url_format="^users/(?P<owner__pk>[^/]+)/{model_singular_short}/add/$",
+        name_format="guest_owner__pk_gamma_add",
+        view_kwargs={"success_url": ".."},
+    ),
+    GuestUrlGenerator.singular_delete(
+        Gamma,
+        view=filtered.FilteredDeleteView,
+        url_format="^users/(?P<owner__pk>[^/]+)/{model_singular_short}/delete/$",
+        name_format="guest_owner__pk_gamma_delete",
     ),
 )

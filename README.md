@@ -5,4 +5,4 @@ The purpose of this library is to provide a consistent set of URL patterns, name
 
 # Pending functionality
 
-Singular views that can do "create or detail" or "create or update" depending on the absence or presence of the object in question.
+Singular add view should redirect to the detail view if the object already exists

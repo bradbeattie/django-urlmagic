@@ -21,7 +21,7 @@ class Gamma(models.Model):
     name = models.CharField(max_length=100, db_index=True)
 
     def __unicode__(self):
-        return self.name
+        return "%s (%s)" % (self.name, self._meta.verbose_name)
 
     def get_absolute_url(self):
         return reverse("guest_gamma_detail", args=[self.pk])
@@ -32,6 +32,7 @@ class Gamma(models.Model):
 
 class Delta(NamedAndSlugged):
     alphas = models.ManyToManyField(Alpha, null=True, blank=True)
+    beta = models.OneToOneField(Beta, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse("guest_delta_detail", args=[self.slug])

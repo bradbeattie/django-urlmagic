@@ -8,7 +8,7 @@ class ContextListView(mixins.ContextViewMixin, ListView):
     pass
 
 
-class ContextDetailView(mixins.ContextViewMixin, DetailView):
+class ContextDetailView(mixins.ContextViewMixin, mixins.RedirectOn404Mixin, mixins.SingularViewMixin, DetailView):
     pass
 
 
@@ -16,9 +16,9 @@ class ContextCreateView(mixins.ContextViewMixin, CreateView):
     pass
 
 
-class ContextUpdateView(mixins.ContextViewMixin, UpdateView):
+class ContextUpdateView(mixins.ContextViewMixin, mixins.RedirectOn404Mixin, mixins.SingularViewMixin, UpdateView):
     pass
 
 
-class ContextDeleteView(mixins.ContextViewMixin, DeleteView):
+class ContextDeleteView(mixins.ContextViewMixin, mixins.RedirectOn404Mixin, mixins.SingularViewMixin, DeleteView):
     pass

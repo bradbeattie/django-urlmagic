@@ -1,4 +1,6 @@
 from urlmagic.utils import get_user_field_names
+from django.http import HttpResponseRedirect
+from django.http import Http404
 
 
 class ContextViewMixin(object):
@@ -8,6 +10,19 @@ class ContextViewMixin(object):
         context = super(ContextViewMixin, self).get_context_data(*args, **kwargs)
         context.update(self.extra_context)
         return context
+
+
+class RedirectOn404Mixin(object):
+    redirect_on_404 = None
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(RedirectOn404Mixin, self).get(request, *args, **kwargs)
+        except Http404:
+            if self.redirect_on_404:
+                return HttpResponseRedirect(self.redirect_on_404)
+            else:
+                raise
 
 
 class AutomaticUserFormMixin(object):
@@ -24,7 +39,9 @@ class SingularViewMixin(object):
         if pk is None and slug is None:
             queryset = self.get_queryset()
             if queryset.count():
-                self.kwargs["pk"] = queryset[0].pk
+                self.kwargs["pk"] = queryset.first().pk
+            else:
+                raise Http404
 
     def get(self, request, *args, **kwargs):
         self.adjust_kwargs()
@@ -38,5 +55,11 @@ class SingularViewMixin(object):
 class FormRequestViewMixin(object):
     def get_form_kwargs(self):
         kwargs = super(FormRequestViewMixin, self).get_form_kwargs()
-        kwargs["request"] = self.request
+        if hasattr(self.get_form_class(), "request"):
+            kwargs["request"] = self.request
         return kwargs
+
+    def get_form(self, form_class):
+        form = super(FormRequestViewMixin, self).get_form(form_class)
+        form.request = self.request
+        return form

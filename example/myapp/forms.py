@@ -25,3 +25,12 @@ class MyGammaEdit(forms.ModelForm):
     class Meta:
         model = models.Gamma
         exclude = ["owner"]
+
+
+class GuestGammaAdd(forms.ModelForm):
+    class Meta:
+        model = models.Gamma
+        exclude = ["owner"]
+
+    def save(self, *args, **kwargs):
+        raise Exception(self.instance, args, kwargs, self.request)

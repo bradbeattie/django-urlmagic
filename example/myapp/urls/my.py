@@ -12,7 +12,7 @@ urlpatterns = patterns(
     MyUrlGenerator.delete(Beta),
     MyUrlGenerator.detail(Beta),
     MyUrlGenerator.singular_add(Gamma, form_class=forms.MyGammaAdd),
-    MyUrlGenerator.singular_edit(Gamma, form_class=forms.MyGammaEdit),
+    MyUrlGenerator.singular_edit(Gamma, form_class=forms.MyGammaEdit, view_kwargs={"redirect_on_404": "../add/"}),
+    MyUrlGenerator.singular_detail(Gamma, view_kwargs={"redirect_on_404": "add/"}),
     MyUrlGenerator.singular_delete(Gamma),
-    MyUrlGenerator.singular_detail(Gamma),
 )

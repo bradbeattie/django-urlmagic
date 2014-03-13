@@ -18,7 +18,7 @@ class NamedAndSlugged(models.Model):
         abstract = True
 
     def __unicode__(self):
-        return self.name
+        return "%s (%s)" % (self.name, self._meta.verbose_name)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.slug or self.name)
