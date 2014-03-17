@@ -12,7 +12,7 @@ class ContextDetailView(mixins.ContextViewMixin, mixins.RedirectOn404Mixin, mixi
     pass
 
 
-class ContextCreateView(mixins.ContextViewMixin, CreateView):
+class ContextCreateView(mixins.ContextViewMixin, mixins.RedirectOnExistsMixin, CreateView):
     pass
 
 

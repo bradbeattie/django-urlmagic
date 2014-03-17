@@ -1,4 +1,5 @@
 from urlmagic.utils import get_user_field_names
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.http import Http404
 
@@ -12,6 +13,26 @@ class ContextViewMixin(object):
         return context
 
 
+class ObjectAlreadyExists(Exception):
+    pass
+
+
+class RedirectOnExistsMixin(object):
+    redirect_on_exists = None
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(RedirectOnExistsMixin, self).get(request, *args, **kwargs)
+        except ObjectAlreadyExists:
+            if self.redirect_on_exists:
+                # TODO: Investigate why django.shortcuts.redirect isn't properly handling relative URLs like "../add/"
+                if self.redirect_on_exists.startswith("."):
+                    return HttpResponseRedirect(self.redirect_on_exists)
+                else:
+                    return redirect(self.redirect_on_exists)
+            else:
+                raise
+
+
 class RedirectOn404Mixin(object):
     redirect_on_404 = None
 
@@ -20,9 +41,25 @@ class RedirectOn404Mixin(object):
             return super(RedirectOn404Mixin, self).get(request, *args, **kwargs)
         except Http404:
             if self.redirect_on_404:
-                return HttpResponseRedirect(self.redirect_on_404)
+                # TODO: Investigate why django.shortcuts.redirect isn't properly handling relative URLs like "../add/"
+                if self.redirect_on_404.startswith("."):
+                    return HttpResponseRedirect(self.redirect_on_404)
+                else:
+                    return redirect(self.redirect_on_404)
             else:
                 raise
+
+
+class ChokeIfAlreadyExists(object):
+    request = None
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        super(ChokeIfAlreadyExists, self).__init__(*args, **kwargs)
+        if self.instance._meta.model.objects.filter(**dict(
+            (field_name, self.request.user)
+            for field_name in getattr(self, "user_fields", get_user_field_names(self.instance))
+        )).exists():
+            raise ObjectAlreadyExists
 
 
 class AutomaticUserFormMixin(object):

@@ -1,6 +1,6 @@
 from django import forms
 from myapp import models
-from urlmagic.mixins import AutomaticUserFormMixin
+from urlmagic.mixins import AutomaticUserFormMixin, ChokeIfAlreadyExists
 
 
 class MyBetaAdd(AutomaticUserFormMixin, forms.ModelForm):
@@ -15,7 +15,7 @@ class MyBetaEdit(forms.ModelForm):
         exclude = ["owner"]
 
 
-class MyGammaAdd(AutomaticUserFormMixin, forms.ModelForm):
+class MyGammaAdd(AutomaticUserFormMixin, ChokeIfAlreadyExists, forms.ModelForm):
     class Meta:
         model = models.Gamma
         exclude = ["owner"]

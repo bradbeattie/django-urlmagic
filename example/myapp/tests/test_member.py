@@ -25,15 +25,16 @@ class MemberTest(common.CommonTestClass):
                     continue
                 print "Member", reverse(name, args=args), pattern.name,
                 response = self.client.get(reverse(name, args=args))
-                if name.startswith("admin:"):
-                    self.assertEqual(response.status_code, 200)
-                    self.assert_("login-form" in response.content)
-                    print "Login form"
-                elif pattern.name.startswith((
+                if pattern.name.startswith((
                     "staff_",
+                    "my_gamma_add",
                 )):
                     self.assertEqual(response.status_code, 302)
                     print 302
+                elif name.startswith("admin:"):
+                    self.assertEqual(response.status_code, 200)
+                    self.assert_("login-form" in response.content)
+                    print "Login form"
                 else:
                     self.assertEqual(response.status_code, 200)
                     print 200

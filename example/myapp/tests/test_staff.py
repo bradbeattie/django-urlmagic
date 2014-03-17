@@ -24,17 +24,15 @@ class StaffTest(common.CommonTestClass):
                     continue
                 print "Staff", reverse(name, args=args), pattern.name,
                 response = self.client.get(reverse(name, args=args))
-                if name.startswith("admin:") and pattern.name.startswith(("myapp_", "index", "password_", "jsi18n")):
+                if pattern.name.startswith("my_gamma_add", ):
+                    self.assertEqual(response.status_code, 302)
+                    print 302
+                elif name.startswith("admin:") and pattern.name.startswith(("myapp_", "index", "password_", "jsi18n")):
                     self.assertEqual(response.status_code, 200)
                     print 200
                 elif name.startswith("admin:"):
                     self.assertEqual(response.status_code, 403)
                     print 403
-                elif pattern.name.startswith((
-                    "none",
-                )):
-                    self.assertEqual(response.status_code, 302)
-                    print 302
                 else:
                     self.assertEqual(response.status_code, 200)
                     print 200
