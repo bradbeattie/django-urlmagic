@@ -16,3 +16,5 @@ urlpatterns = patterns(
     MyUrlGenerator.singular_detail(Gamma, view_kwargs={"redirect_on_404": "my_gamma_add"}),
     MyUrlGenerator.singular_delete(Gamma),
 )
+
+print urlpatterns
