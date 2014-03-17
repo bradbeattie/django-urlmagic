@@ -1,4 +1,5 @@
 from urlmagic.utils import get_user_field_names
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from django.http import Http404
 
@@ -20,7 +21,11 @@ class RedirectOn404Mixin(object):
             return super(RedirectOn404Mixin, self).get(request, *args, **kwargs)
         except Http404:
             if self.redirect_on_404:
-                return HttpResponseRedirect(self.redirect_on_404)
+                # TODO: Investigate why django.shortcuts.redirect isn't properly handling relative URLs like "../add/"
+                if self.redirect_on_404.startswith("."):
+                    return HttpResponseRedirect(self.redirect_on_404)
+                else:
+                    return redirect(self.redirect_on_404)
             else:
                 raise
 
