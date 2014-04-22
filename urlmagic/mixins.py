@@ -1,7 +1,8 @@
-from urlmagic.utils import get_user_field_names
-from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.http import Http404
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from urlmagic.utils import get_user_field_names
 
 
 class ContextViewMixin(object):
@@ -100,3 +101,29 @@ class FormRequestViewMixin(object):
         form = super(FormRequestViewMixin, self).get_form(form_class)
         form.request = self.request
         return form
+
+
+class SuccessRedirectMixin(object):
+    def get_success_url(self, *args, **kwargs):
+        if self.request.REQUEST.get("success_url", None):
+            return self.request.REQUEST.get("success_url")
+        else:
+            return super(SuccessRedirectMixin, self).get_success_url(*args, **kwargs)
+
+
+class MessageSaveMixin(object):
+    success_message = "Save successful."
+
+    def form_valid(self, *args, **kwargs):
+        result = super(MessageSaveMixin, self).form_valid(*args, **kwargs)
+        messages.success(self.request, self.success_message)
+        return result
+
+
+class MessageDeleteMixin(object):
+    success_message = "Deletion successful."
+
+    def delete(self, *args, **kwargs):
+        result = super(MessageDeleteMixin, self).delete(*args, **kwargs)
+        messages.success(self.request, self.success_message)
+        return result

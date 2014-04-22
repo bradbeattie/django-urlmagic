@@ -1,3 +1,4 @@
+{% include "_messages.html" %}
 <h1>{{ model_plural | capfirst }}{% if context_object %} belonging to {{ context_object }}{% endif %}</h1>
 <ul>
     {% for object in object_list %}
