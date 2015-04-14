@@ -6,7 +6,7 @@ from django.utils.text import slugify
 def model_names(model):
     names = {}
     names["model"] = model
-    names["model_system"] = unicode(model._meta.module_name)
+    names["model_system"] = unicode(model._meta.model_name)
     names["model_singular"] = unicode(model._meta.verbose_name)
     names["model_singular_slug"] = unicode(slugify(names["model_singular"]))
     names["model_singular_short"] = names["model_singular_slug"].replace("-", "")

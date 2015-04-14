@@ -31,7 +31,7 @@ class Gamma(models.Model):
 
 
 class Delta(NamedAndSlugged):
-    alphas = models.ManyToManyField(Alpha, null=True, blank=True)
+    alphas = models.ManyToManyField(Alpha, blank=True)
     beta = models.OneToOneField(Beta, null=True, blank=True)
 
     def get_absolute_url(self):
