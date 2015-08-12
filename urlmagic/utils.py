@@ -21,5 +21,5 @@ def get_user_field_names(model):
     return [
         field.name
         for field in model._meta.fields
-        if isinstance(field, ForeignKey) and field.related.parent_model is User
+        if isinstance(field, ForeignKey) and field.related_model is User
     ]
